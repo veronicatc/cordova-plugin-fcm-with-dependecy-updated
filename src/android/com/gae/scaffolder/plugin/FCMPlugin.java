@@ -271,12 +271,17 @@ public class FCMPlugin extends CordovaPlugin {
                 try {
                     if (Build.VERSION.SDK_INT >= 33) { // Android 13+
                         boolean hasRuntimePermission = hasRuntimePermission(POST_NOTIFICATIONS);
-                        if (!hasRuntimePermission) {
+                        if (hasRuntimePermission) {
+                            callbackContext.success(1);
+                        }
+                        else {
                             String[] permissions = new String[]{qualifyPermission(POST_NOTIFICATIONS)};
                             postNotificationPermissionRequestCallbackContext = callbackContext;
                             requestPermissions(plugin, POST_NOTIFICATIONS_PERMISSION_REQUEST_ID, permissions);
                             sendEmptyPluginResultAndKeepCallback(callbackContext);
                         }
+                    } else {
+                        callbackContext.success(1);
                     }
 
                 } catch (Exception e) {
